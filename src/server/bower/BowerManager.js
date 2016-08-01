@@ -149,11 +149,12 @@ class BowerManager {
     listPackages() {
         let continueLog = this.logger.info("BowerManager", "retriving packages..."), logger = this.logger, defer = q.defer();
         this.bower.commands.list()
-            .on("log", function () {
+            .on("log", function (e) {
             debugger;
-            logger.trace("BowerManager", "^rfail^:", "on retriving packages. Code:", e.code, ",details:", e.message);
+            logger.trace("BowerManager", `${e.id}: ${e.message}`);
         })
             .on("error", function (e) {
+            debugger;
             logger.error("BowerManager", "^rfail^:", "on retriving packages. Code:", e.code, ",details:", e.message);
             defer.reject(e);
         })

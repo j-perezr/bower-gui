@@ -5,7 +5,7 @@ import * as open from "open";
 import BowerSrv from "./bower/BowerSrv";
 import * as Logger from "./utils/Logger";
 import * as bodyParser from "body-parser";
-let logger = Logger.getLogger("server");
+let logger = Logger.getLogger("server",{saveInFile:true});
 export interface IServerConfig{
     port:number;
 }

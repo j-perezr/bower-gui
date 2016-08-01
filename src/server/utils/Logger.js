@@ -7,11 +7,10 @@ const LEVELS = {
     WARN:2,
     INFO:3,
     DEBUG:4,
-    TRACE:5,
-    ALL:6
+    ALL:5
 };
 const defaults = {
-    level:LEVELS.TRACE,
+    level:LEVELS.DEBUG,
     logPath:"logs"
 };
 
@@ -19,20 +18,27 @@ class LogMessage{
     /**
      *
      * @param params
-     * @param params.terminal   Terminal
-     * @param params.level      Level
-     * @param params.context    Message context
-     * @param params.msg        Message
+     * @param params.terminal       Terminal
+     * @param params.level          Level
+     * @param params.context        Message context
+     * @param params.msg            Message
+     * @param params.saveInFile     Save automatically in a file
+     * @param [params.logPath=logs] Path where save logs
      */
     constructor(params){
         debugger;
+        this.logPath = params.logPath || defaults.logPath;
+        this.date = new Date();
         this.terminal = params.terminal;
+        //this.terminal.getCursorLocation(this._saveLocation.bind(this));
         this.level = params.level;
         this.context = params.context;
         this.originalMsg = this._parseMessage(params.msg);
         this.msg = this._prepareMsg(this.context,this.originalMsg);
         this.terminal((params.breakLine !== false ? "\n": "")+this.msg);
-        this.terminal.getCursorLocation(this._saveLocation.bind(this));
+        if(params.saveInFile){
+            this.file();
+        }
     }
     _saveLocation(error,x,y){
         if(!error){
@@ -84,11 +90,8 @@ class LogMessage{
             case LEVELS.DEBUG:
                 type="^Y[DEBUG]^:";
                 break;
-            case LEVELS.TRACE:
-                type="^b[TRACE]^:";
-                break;
         }
-        return [type,new Date().toISOString(),"^C["+context+"]^:",msg].join(" ");
+        return [type,this.date.toISOString(),"^C["+context+"]^:",msg].join(" ");
     }
     /**
      *
@@ -103,12 +106,12 @@ class LogMessage{
         }
     }
     file(){
-        let date = new Date(),
+        let date = this.date,
             day = date.getDate(),
-            year = date.getYear(),
-            month = date.getMonth(),
+            year = date.getFullYear(),
+            month = date.getMonth()+1,
             hour = date.getHours(),
-            route = path.resolve(this.config.logPath);
+            route = path.resolve(this.logPath);
         if(!fs.existsSync(route)){
             fs.mkdirSync(route);
         }
@@ -124,7 +127,13 @@ class LogMessage{
         if(!fs.existsSync(route)){
             fs.mkdirSync(route);
         }
-        fs.writeFile(hour+".txt",msg);
+        route = path.resolve(route,hour.toString()+".txt");
+        fs.appendFile(route,this.terminal.str(this.terminal.noFormat(this.msg))+"\n",this._onWrite.bind(this));
+    }
+    _onWrite(e){
+        if(e) {
+            console.error("[Logger]", `Error on write file:${e}`)
+        }
     }
 }
 /**
@@ -152,7 +161,8 @@ class Logger{
             terminal:this.terminal,
             level:LEVELS.WARN,
             context:context,
-            msg:msg
+            msg:msg,
+            saveInFile:this.config.saveInFile
         });
         return message;
     }
@@ -171,26 +181,28 @@ class Logger{
             terminal:this.terminal,
             level:LEVELS.INFO,
             context:context,
-            msg:msg
+            msg:msg,
+            saveInFile:this.config.saveInFile
         });
         return message;
     }
     /**
-     * @description Muestra un mensaje de error
+     * @description Muestra un mensaje de traza
      * @param context   El contexto hace referencia a la clase o elemento que produce el log, se enmarca en []
      * @param msg       Uno o varios mensajes.
      * @returns continue    Permite imprimir a continuación del log.
-     * @example let continueLog = logger.error("Contexto","mensaje","en","error")
-     * [ERROR] 2016-07-02T12:29:38.174Z [Contexto] mensaje en error
+     * @example let continueLog = logger.trace("Contexto","mensaje","en","traza")
+     * [TRACE] 2016-07-02T12:29:38.174Z [Contexto] mensaje en traza
      * continueLog("y más","mensaje")
-     * [ERROR] 2016-07-02T12:29:38.174Z [Contexto] mensaje en error y más mensaje
+     * [TRACE] 2016-07-02T12:29:38.174Z [Contexto] mensaje en error y más mensaje
      */
-    error (context,...msg){
+    trace (context,...msg){
         let message = new LogMessage({
             terminal:this.terminal,
             level:LEVELS.ERROR,
             context:context,
-            msg:msg
+            msg:msg,
+            saveInFile:this.config.saveInFile
         });
         return message;
     }

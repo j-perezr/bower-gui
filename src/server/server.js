@@ -4,7 +4,7 @@ const path = require("path");
 const BowerSrv_1 = require("./bower/BowerSrv");
 const Logger = require("./utils/Logger");
 const bodyParser = require("body-parser");
-let logger = Logger.getLogger("server");
+let logger = Logger.getLogger("server", { saveInFile: true });
 /**
  * @class Server
  * @description Inicializa el servidor con la api erst
