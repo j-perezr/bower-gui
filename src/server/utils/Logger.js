@@ -128,7 +128,7 @@ class LogMessage{
             fs.mkdirSync(route);
         }
         route = path.resolve(route,hour.toString()+".txt");
-        fs.appendFile(route,this.terminal.str(this.terminal.noFormat(this.msg))+"\n",this._onWrite.bind(this));
+        fs.appendFile(route,this.msg+"\n",this._onWrite.bind(this));
     }
     _onWrite(e){
         if(e) {
@@ -199,7 +199,7 @@ class Logger{
     trace (context,...msg){
         let message = new LogMessage({
             terminal:this.terminal,
-            level:LEVELS.ERROR,
+            level:LEVELS.DEBUG,
             context:context,
             msg:msg,
             saveInFile:this.config.saveInFile
