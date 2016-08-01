@@ -5,3 +5,4 @@ bower_components/
 dist/
 typings/
 src/bower_components/
+/logs/
