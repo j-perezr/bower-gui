@@ -1,11 +1,11 @@
 let gulp = require("gulp");
 let gutil = require("gulp-util");
 gulp.task("backend",function(){
-    let utils = require("./utils");
-    let defaults = require("./webpack.config-defaults");
+    let utils = require("./../common/utils.js");
+    let defaults = require("./../webpack.config-defaults.js");
     let webpack = require("webpack-stream");
     let fs = require('fs');
-    let webpackConfig = require("./webpack.config-backend");
+    let webpackConfig = require("./webpack.config-backend.js");
     let nodeModules = {};
     fs.readdirSync('node_modules')
         .filter(function(x) {

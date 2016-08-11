@@ -1,4 +1,4 @@
-var config 		 = require('./config');
+var config 		 = require('./../config');
 var gulp       = require('gulp');
 var clean = require("gulp-clean");
 gulp.task('clean-dist', function() {
