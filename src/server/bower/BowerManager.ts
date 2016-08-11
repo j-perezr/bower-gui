@@ -1,4 +1,4 @@
-import * as logger from "../utils/Logger";
+import * as logger from "../common/Logger";
 import * as q from "q";
 import * as fs from "fs";
 export interface IError {
@@ -37,20 +37,23 @@ export class BowerManager {
         this.logger.info("BowerManager",`attempting to install all packages...`);
         this.bower.commands.install([],options)
             .on("log",function (log) {
-                logger.trace("BowerManager", "^cINSTALL^:", `id: ${log.id}, message: ${log.message}`);
+                debugger;
                 if(log.id == "cached"){
-                    logger.trace("BowerManager", "^cINSTALL^:", `Found cache, package: ${log.data.resolver.name}, source: ${log.data.resolver.source}, target: ${log.data.resolver.target}`);
+                    logger.trace("BowerManager",`^cFound cache^:, package: ${log.data.resolver.name}, source: ${log.data.resolver.source}, target: ${log.data.resolver.target}`);
+                }else if(log.id == "install"){
+                    logger.info("BowerManager", `^c${log.id}^: ${log.message}`);
+                }else{
+                    logger.trace("BowerManager", `^c${log.id}^: ${log.message}`);
                 }
-                logger.trace("BowerManager", "^cINSTALL^:", `id: ${log.id}, message: ${log.message}`,log);
             })
             .on("error",function(e){
                 debugger;
-                logger.error("BowerManager",` fail on uninstall all packages. Code: ${e.code}, details: ${e.message}`);
+                logger.error("BowerManager",` fail on install all packages. Code: ${e.code}, details: ${e.message}`);
                 defer.reject(e);
             })
             .on("end",function(result){
                 debugger;
-                logger.info("BowerManager",`attempting to install all packages...^gok^:`);
+                logger.info("BowerManager",`^gok^: Packages installed`);
                 defer.resolve(result);
             });
         return defer.promise;
@@ -62,6 +65,13 @@ export class BowerManager {
         this.bower.commands.install([name],options)
             .on("log",function (log) {
                 debugger;
+                if(log.id == "cached"){
+                    logger.trace("BowerManager",`^cFound cache^:, package: ${log.data.resolver.name}, source: ${log.data.resolver.source}, target: ${log.data.resolver.target}`);
+                }else if(log.id == "install"){
+                    logger.info("BowerManager", `^c${log.id}^: ${log.message}`);
+                }else{
+                    logger.trace("BowerManager", `^c${log.id}^: ${log.message}`);
+                }
             })
             .on("error",function(e){
                 debugger;
@@ -70,7 +80,7 @@ export class BowerManager {
             })
             .on("end",function(result){
                 debugger;
-                logger.info("BowerManager",`^gok^ Package'${name}' installed:`);
+                logger.info("BowerManager",`^gok^: Package'${name}' installed`);
                 defer.resolve(result);
             });
         return defer.promise;

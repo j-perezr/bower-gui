@@ -11,7 +11,7 @@ const LEVELS = {
 };
 const defaults = {
     level:LEVELS.DEBUG,
-    logPath:"logs"
+    logPath:path.resolve(process.cwd(),"logs")
 };
 
 class LogMessage{
@@ -26,7 +26,7 @@ class LogMessage{
      * @param [params.logPath=logs] Path where save logs
      */
     constructor(params){
-        debugger;
+        
         this.logPath = params.logPath || defaults.logPath;
         this.date = new Date();
         this.terminal = params.terminal;
@@ -91,7 +91,8 @@ class LogMessage{
                 type="^Y[DEBUG]^:";
                 break;
         }
-        return [type,this.date.toISOString(),"^C["+context+"]^:",msg].join(" ");
+        var time = this.date.toISOString();
+        return [type,time.substr(time.indexOf("T")+1),"^C["+context+"]^:",msg].join(" ");
     }
     /**
      *
@@ -145,6 +146,26 @@ class Logger{
     constructor(config){
         this.setConfig(config);
         this.terminal = require("terminal-kit").terminal;
+    }
+    /**
+     * @description Muestra un mensaje error
+     * @param context   El contexto hace referencia a la clase o elemento que produce el log, se enmarca en []
+     * @param msg       Uno o varios mensajes.
+     * @returns continue    Permite imprimir a continuación del log.
+     * @example let continueLog = logger.error("Contexto","mensaje","en","error")
+     * [ERROR] 2016-07-02T12:29:38.174Z [Contexto] mensaje en error
+     * continueLog("y más","mensaje")
+     * [ERROR] 2016-07-02T12:29:38.174Z [Contexto] mensaje en error y más mensaje
+     */
+    error (context,...msg){
+        let message = new LogMessage({
+            terminal:this.terminal,
+            level:LEVELS.ERROR,
+            context:context,
+            msg:msg,
+            saveInFile:this.config.saveInFile
+        });
+        return message;
     }
     /**
      * @description Muestra un mensaje warn

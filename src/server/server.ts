@@ -1,10 +1,11 @@
 import * as express from "express";
 import * as contentDisposition from "content-disposition";
 import * as path from "path";
-import * as open from "open";
 import BowerSrv from "./bower/BowerSrv";
-import * as Logger from "./utils/Logger";
+import * as Logger from "./common/Logger";
 import * as bodyParser from "body-parser";
+import * as Socket from "socket.io";
+import * as http from "http";
 let logger = Logger.getLogger("server",{saveInFile:true});
 export interface IServerConfig{
     port:number;
@@ -15,6 +16,8 @@ export interface IServerConfig{
  */
 export class Server {
     protected app;
+    protected socketServer;
+    protected io;
     constructor(config:IServerConfig={port:3000}){
         //get express instance
         this.app = express();
@@ -26,10 +29,11 @@ export class Server {
         this.app.use('/', express.static(path.resolve("./")));
         //set port
         this.app.listen(config.port);
+        this.socketServer = http.Server(this.app);
+        this.socketServer.listen(3001);
+        this.io = new Socket(this.socketServer);
         logger.info("Server","Running on port",config.port);
-        //open default browser
-        //open("http://localhost:"+config.port);
         //start bower server
-        BowerSrv.getInstance(this.app);
+        BowerSrv.getInstance(this.io);
     }
 }

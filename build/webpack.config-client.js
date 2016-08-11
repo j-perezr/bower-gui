@@ -1,4 +1,15 @@
-let defaultConfig = {
+const ExtractTextPlugin = require("extract-text-webpack-plugin");
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const fileLoader = require("file-loader");
+module.exports = {
+    entry: {
+        app:["./src/client/index.tsx"]
+    },
+    output: {
+        path: require("path").resolve("./dist"),
+        filename: 'client.js'
+    },
+
     // Enable sourcemaps for debugging webpack's output.
     devtool: "source-map",
 
@@ -10,7 +21,13 @@ let defaultConfig = {
     module: {
         loaders: [
             // All files with a '.ts' or '.tsx' extension will be handled by 'ts-loader'.
-            {test: /\.tsx?$/, loader: "ts-loader"}
+            {test: /\.tsx?$/, loader: "ts-loader"},
+            {
+                test: /\.html$/,
+                loader: 'file?name=[name].[ext]'
+            },
+            {test: /\.css$/, loader: ExtractTextPlugin.extract("style-loader", "css-loader")},
+            {test: /\.scss$/, loader: ExtractTextPlugin.extract("style-loader", "css-loader","sass-loader")}
         ],
 
         preLoaders: [
@@ -24,9 +41,7 @@ let defaultConfig = {
     // This is important because it allows us to avoid bundling all of our
     // dependencies, which allows browsers to cache those libraries between builds.
     externals: {},
+    plugins: [
+        new ExtractTextPlugin("dist/styles.css")
+    ]
 };
-if(process.env.NODE_ENV !== 'production') {
-    defaultConfig.devtool = 'source-map';
-    defaultConfig.debug = true;
-}
-module.exports = defaultConfig;
