@@ -8,7 +8,7 @@ gulp.task("client",function(){
     let webpackConfig = require("./webpack.config-client.js");
     let clientConfig = utils.getConfig(defaults, webpackConfig);
     //webpackConfig.watch = true;
-    return gulp.src('src/client/index.tsx')
+    return gulp.src('src/client/App.tsx')
         .pipe(webpack(clientConfig))
         .on('error', gutil.log)
         .pipe(gulp.dest(config.dist));
