@@ -1,6 +1,5 @@
 const ExtractTextPlugin = require("extract-text-webpack-plugin");
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const fileLoader = require("file-loader");
 module.exports = {
     entry: {
         app:["./src/client/App.tsx"]
@@ -9,13 +8,13 @@ module.exports = {
         path: require("path").resolve("./dist"),
         filename: 'client.js'
     },
-
+    watch:true,
     // Enable sourcemaps for debugging webpack's output.
     devtool: "source-map",
 
     resolve: {
         // Add '.ts' and '.tsx' as resolvable extensions.
-        extensions: ["", ".webpack.js", ".web.js", ".ts", ".tsx", ".js"]
+        extensions: ["", ".webpack.js", ".web.js", ".ts", ".tsx", ".js",".css",".scss"]
     },
 
     module: {
@@ -42,6 +41,6 @@ module.exports = {
     // dependencies, which allows browsers to cache those libraries between builds.
     externals: {},
     plugins: [
-        new ExtractTextPlugin("dist/styles.css")
+        new ExtractTextPlugin("styles.css")
     ]
 };

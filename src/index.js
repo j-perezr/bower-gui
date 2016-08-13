@@ -7,7 +7,7 @@ var open = require("open");
 program
     .option('-p, --port <port>', 'Port on which to listen to (defaults to 3000)', parseInt)
     .parse(process.argv);
-let port = program.port || 3000;
+let port = program.port || 8081;
 new server.Server({
     port:port
 },bower);

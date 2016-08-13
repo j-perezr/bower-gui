@@ -18,7 +18,7 @@ export class Server {
     protected app;
     protected socketServer;
     protected io;
-    constructor(config:IServerConfig={port:3000}){
+    constructor(config:IServerConfig){
         //get express instance
         this.app = express();
         this.app.use( bodyParser.json() );       // to support JSON-encoded bodies
@@ -30,9 +30,10 @@ export class Server {
         //set port
         this.app.listen(config.port);
         this.socketServer = http.Server(this.app);
-        this.socketServer.listen(3001);
+        this.socketServer.listen(config.port+1);
         this.io = new Socket(this.socketServer);
         logger.info("Server","Running on port",config.port);
+        logger.info("Server","Socket listening on port",config.port+1);
         //start bower server
         BowerSrv.getInstance(this.io);
     }
