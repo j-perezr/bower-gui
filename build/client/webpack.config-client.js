@@ -1,5 +1,5 @@
 const ExtractTextPlugin = require("extract-text-webpack-plugin");
-const HtmlWebpackPlugin = require('html-webpack-plugin');
+const WriteFilePlugin = require('write-file-webpack-plugin');
 module.exports = {
     entry: {
         app:["./src/client/App.tsx"]
@@ -7,6 +7,9 @@ module.exports = {
     output: {
         path: require("path").resolve("./dist"),
         filename: 'client.js'
+    },
+    devServer: {
+        outputPath: 'dist/client.js'
     },
     watch:true,
     // Enable sourcemaps for debugging webpack's output.
@@ -16,7 +19,6 @@ module.exports = {
         // Add '.ts' and '.tsx' as resolvable extensions.
         extensions: ["", ".webpack.js", ".web.js", ".ts", ".tsx", ".js",".css",".scss"]
     },
-
     module: {
         loaders: [
             // All files with a '.ts' or '.tsx' extension will be handled by 'ts-loader'.
@@ -41,6 +43,7 @@ module.exports = {
     // dependencies, which allows browsers to cache those libraries between builds.
     externals: {},
     plugins: [
-        new ExtractTextPlugin("styles.css")
+        new ExtractTextPlugin("styles.css"),
+        new WriteFilePlugin()
     ]
 };

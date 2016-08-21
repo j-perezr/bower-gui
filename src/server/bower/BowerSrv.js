@@ -1,14 +1,14 @@
 "use strict";
-var logger = require("../common/Logger");
-var bower = require("bower");
-var fs = require("fs");
-var BowerManager_1 = require("./BowerManager");
+const logger = require("../common/Logger");
+const bower = require("bower");
+const fs = require("fs");
+const BowerManager_1 = require("./BowerManager");
 /**
  * @class BowerSrv
  * @description Servicios de bower que otorgan la api rest
  */
-var BowerSrv = (function () {
-    function BowerSrv(socketInstance) {
+class BowerSrv {
+    constructor(socketInstance) {
         this.socketInstance = socketInstance;
         this.bower = bower;
         this.logger = logger.getLogger("server");
@@ -23,47 +23,42 @@ var BowerSrv = (function () {
      * @param bower
      * @returns {any}
      */
-    BowerSrv.getInstance = function (socketInstance, bower) {
+    static getInstance(socketInstance) {
         if (!BowerSrv.instance) {
             BowerSrv.instance = new BowerSrv(socketInstance);
         }
         return BowerSrv.instance;
-    };
-    BowerSrv.prototype._onClientConnect = function (socket) {
+    }
+    _onClientConnect(socket) {
         debugger;
         this._registerEvents(socket);
         this.logger.info("BowerSrv", "connected and listenging");
-    };
+    }
     /**
      * @description Registra todas las rutas disponibles exponiendo el api
      * @private
      */
-    BowerSrv.prototype._registerEvents = function (socket) {
+    _registerEvents(socket) {
         var that = this;
         socket.on(BowerSrv.GET_PACKAGES, function (data) {
             that._onGetPackages(data, socket);
         });
-    };
-    BowerSrv.prototype._onGetPackages = function (data, socket) {
+    }
+    _onGetPackages(data, socket) {
         debugger;
         this.logger.info("BowerSrv", "get packages");
-    };
-    BowerSrv.prototype._setGetPackages = function () {
-    };
-    BowerSrv.prototype._send = function () {
-    };
-    BowerSrv.BASE_EVENT = "bower";
-    BowerSrv.BASE_PACKAGES = "packages";
-    BowerSrv.GET_PACKAGES = BowerSrv.BASE_PACKAGES + ".list";
-    BowerSrv.INSTALL_PACKAGES = BowerSrv.BASE_PACKAGES + ".install";
-    BowerSrv.GET_SEARCH_PACKAGE = BowerSrv.BASE_PACKAGES + ".search";
-    BowerSrv.GET_INFO_PACKAGE = BowerSrv.BASE_PACKAGES + ".info";
-    BowerSrv.UNINSTALL_PACKAGE = BowerSrv.BASE_PACKAGES + ".uninstall";
-    BowerSrv.BASE_CONFIG = "config";
-    BowerSrv.GET_CONFIG = BowerSrv.BASE_CONFIG + ".get";
-    BowerSrv.PUT_CONFIG = BowerSrv.BASE_CONFIG + ".set";
-    return BowerSrv;
-}());
+    }
+}
+BowerSrv.BASE_EVENT = "bower";
+BowerSrv.BASE_PACKAGES = "packages";
+BowerSrv.GET_PACKAGES = BowerSrv.BASE_PACKAGES + ".list";
+BowerSrv.INSTALL_PACKAGES = BowerSrv.BASE_PACKAGES + ".install";
+BowerSrv.GET_SEARCH_PACKAGE = BowerSrv.BASE_PACKAGES + ".search";
+BowerSrv.GET_INFO_PACKAGE = BowerSrv.BASE_PACKAGES + ".info";
+BowerSrv.UNINSTALL_PACKAGE = BowerSrv.BASE_PACKAGES + ".uninstall";
+BowerSrv.BASE_CONFIG = "config";
+BowerSrv.GET_CONFIG = BowerSrv.BASE_CONFIG + ".get";
+BowerSrv.PUT_CONFIG = BowerSrv.BASE_CONFIG + ".set";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = BowerSrv;
 //# sourceMappingURL=BowerSrv.js.map

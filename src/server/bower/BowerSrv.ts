@@ -48,7 +48,7 @@ export default class BowerSrv {
      * @param bower
      * @returns {any}
      */
-    public static getInstance(socketInstance, bower) {
+    public static getInstance(socketInstance) {
         if (!BowerSrv.instance) {
             BowerSrv.instance = new BowerSrv(socketInstance);
         }
@@ -72,11 +72,5 @@ export default class BowerSrv {
     protected _onGetPackages(data,socket){
         debugger;
         this.logger.info("BowerSrv","get packages");
-    }
-    protected _setGetPackages(){
-
-    }
-    protected _send(){
-
     }
 }

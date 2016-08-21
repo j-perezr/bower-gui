@@ -9,7 +9,12 @@ import * as http from "http";
 let logger = Logger.getLogger("server",{saveInFile:true});
 export interface IServerConfig{
     port:number;
+    socketPort:number;
 }
+export var defaultConfig = {
+    port:8081,
+    socketPort:8082
+};
 /**
  * @class Server
  * @description Inicializa el servidor con la api erst
@@ -30,10 +35,10 @@ export class Server {
         //set port
         this.app.listen(config.port);
         this.socketServer = http.Server(this.app);
-        this.socketServer.listen(config.port+1);
+        this.socketServer.listen(config.socketPort);
         this.io = new Socket(this.socketServer);
         logger.info("Server","Running on port",config.port);
-        logger.info("Server","Socket listening on port",config.port+1);
+        logger.info("Server","Socket listening on port",config.socketPort);
         //start bower server
         BowerSrv.getInstance(this.io);
     }

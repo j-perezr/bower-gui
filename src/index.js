@@ -5,11 +5,13 @@ let program = require('commander');
 let bower = require("bower");
 var open = require("open");
 program
-    .option('-p, --port <port>', 'Port on which to listen to (defaults to 3000)', parseInt)
+    .version("0.0.1")
+    .option('-p, --port <n>', 'Port for express server (default to 8081)', parseInt)
+    .option('-P, --socket-port <n>', 'Port for socket server (default 8082)',parseInt)
     .parse(process.argv);
-let port = program.port || 8081;
 new server.Server({
-    port:port
+    port:program.port,
+    socketPort:program.socketPort
 },bower);
 //open default browser
 open("http://localhost:"+port+"/dist/index.html");

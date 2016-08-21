@@ -1,72 +1,72 @@
 "use strict";
-var logger = require("../common/Logger");
-var q = require("q");
+const logger = require("../common/Logger");
+const q = require("q");
 /**
  * @class BowerManager
  * @description Servicios de bower que otorgan la api rest
  */
-var BowerManager = (function () {
-    function BowerManager(bower, fs) {
+class BowerManager {
+    constructor(bower, fs) {
         this.bower = bower;
         this.fs = fs;
         this.logger = logger.getLogger("server");
     }
-    BowerManager.prototype.installAll = function (options) {
-        var defer = q.defer(), logger = this.logger;
-        this.logger.info("BowerManager", "attempting to install all packages...");
+    installAll(options) {
+        let defer = q.defer(), logger = this.logger;
+        this.logger.info("BowerManager", `attempting to install all packages...`);
         this.bower.commands.install([], options)
             .on("log", function (log) {
             debugger;
             if (log.id == "cached") {
-                logger.trace("BowerManager", "^cFound cache^:, package: " + log.data.resolver.name + ", source: " + log.data.resolver.source + ", target: " + log.data.resolver.target);
+                logger.trace("BowerManager", `^cFound cache^:, package: ${log.data.resolver.name}, source: ${log.data.resolver.source}, target: ${log.data.resolver.target}`);
             }
             else if (log.id == "install") {
-                logger.info("BowerManager", "^c" + log.id + "^: " + log.message);
+                logger.info("BowerManager", `^c${log.id}^: ${log.message}`);
             }
             else {
-                logger.trace("BowerManager", "^c" + log.id + "^: " + log.message);
+                logger.trace("BowerManager", `^c${log.id}^: ${log.message}`);
             }
         })
             .on("error", function (e) {
             debugger;
-            logger.error("BowerManager", " fail on install all packages. Code: " + e.code + ", details: " + e.message);
+            logger.error("BowerManager", ` fail on install all packages. Code: ${e.code}, details: ${e.message}`);
             defer.reject(e);
         })
             .on("end", function (result) {
             debugger;
-            logger.info("BowerManager", "^gok^: Packages installed");
+            logger.info("BowerManager", `^gok^: Packages installed`);
             defer.resolve(result);
         });
         return defer.promise;
-    };
-    BowerManager.prototype.install = function (name, options) {
-        var defer = q.defer(), logger = this.logger;
-        this.logger.info("BowerManager", "attempting to install the package '" + name + "'...");
+    }
+    install(name, options) {
+        let defer = q.defer(), logger = this.logger;
+        this.logger.info("BowerManager", `attempting to install the package '${name}'...`);
         this.bower.commands.install([name], options)
             .on("log", function (log) {
             debugger;
             if (log.id == "cached") {
-                logger.trace("BowerManager", "^cFound cache^:, package: " + log.data.resolver.name + ", source: " + log.data.resolver.source + ", target: " + log.data.resolver.target);
+                logger.trace("BowerManager", `^cFound cache^:, package: ${log.data.resolver.name}, source: ${log.data.resolver.source}, target: ${log.data.resolver.target}`);
             }
             else if (log.id == "install") {
-                logger.info("BowerManager", "^c" + log.id + "^: " + log.message);
+                logger.info("BowerManager", `^c${log.id}^: ${log.message}`);
             }
             else {
-                logger.trace("BowerManager", "^c" + log.id + "^: " + log.message);
+                logger.trace("BowerManager", `^c${log.id}^: ${log.message}`);
             }
         })
             .on("error", function (e) {
             debugger;
-            logger.error("BowerManager", "fail on uninstall '" + name + "'. Code: " + e.code + ", details: " + e.message);
+            logger.error("BowerManager", `fail on uninstall '${name}'. Code: ${e.code}, details: ${e.message}`);
             defer.reject(e);
         })
             .on("end", function (result) {
             debugger;
-            logger.info("BowerManager", "^gok^: Package'" + name + "' installed");
+            logger.info("BowerManager", `^gok^: Package'${name}' installed`);
             defer.resolve(result);
         });
         return defer.promise;
-    };
+    }
     /**
      * @description Desinstala un paquete
      * @param name                  Nombre del paquete a desinstalar
@@ -75,37 +75,37 @@ var BowerManager = (function () {
      * @param [options.saveDev]     Elimina el paquete del registro de dependencias de desarrollo(bower.json)
      * @returns {Promise<T>}
      */
-    BowerManager.prototype.uninstall = function (name, options) {
-        var defer = q.defer(), logger = this.logger;
-        this.logger.info("BowerManager", "attempting to uninstall the package '" + name + "'...");
+    uninstall(name, options) {
+        let defer = q.defer(), logger = this.logger;
+        this.logger.info("BowerManager", `attempting to uninstall the package '${name}'...`);
         this.bower.commands.uninstall([name], options)
             .on("log", function (log) {
             debugger;
             if (log.id == "not-installed") {
-                logger.warn("BowerManager", "'" + name + "' is not installed. Any change done");
+                logger.warn("BowerManager", `'${name}' is not installed. Any change done`);
                 defer.resolve(null);
             }
         })
             .on("error", function (e) {
             debugger;
-            logger.error("BowerManager", "fail on uninstall '" + name + "'. Code: " + e.code + ", details: " + e.message);
+            logger.error("BowerManager", `fail on uninstall '${name}'. Code: ${e.code}, details: ${e.message}`);
             defer.reject(e);
         })
             .on("end", function (result) {
             debugger;
-            logger.info("BowerManager", "^gok^: Package '" + name + "' uninstalled");
+            logger.info("BowerManager", `^gok^: Package '${name}' uninstalled`);
             defer.resolve(result);
         });
         return defer.promise;
-    };
+    }
     /**
      * @description Busca paquetes cuyo nombre coincida con el término indicado
      * @param term
      * @returns {Promise<T>}
      */
-    BowerManager.prototype.info = function (name) {
-        var defer = q.defer(), logger = this.logger;
-        this.logger.info("BowerManager", "retriving package info for '" + name + "'...");
+    info(name) {
+        let defer = q.defer(), logger = this.logger;
+        this.logger.info("BowerManager", `retriving package info for '${name}'...`);
         this.bower.commands.info(name)
             .on("log", function () {
             debugger;
@@ -114,60 +114,60 @@ var BowerManager = (function () {
             debugger;
             switch (e.code) {
                 case "ENOTFOUND":
-                    logger.warn("BowerManager", "Not found '" + name + "' package");
+                    logger.warn("BowerManager", `Not found '${name}' package`);
                     defer.resolve(null);
                     break;
                 default:
-                    logger.error("BowerManager", "fail on get info for '" + name + "'. Code: " + e.code + ", details: " + e.message);
+                    logger.error("BowerManager", `fail on get info for '${name}'. Code: ${e.code}, details: ${e.message}`);
                     defer.reject(e);
                     break;
             }
         })
             .on("end", function (result) {
-            logger.info("BowerManager", "^gok^: Retrived '" + name + "' package info");
+            logger.info("BowerManager", `^gok^: Retrived '${name}' package info`);
             defer.resolve(result);
         });
         return defer.promise;
-    };
+    }
     /**
      * @description Busca paquetes cuyo nombre coincida con el término indicado
      * @param term
      * @returns {Promise<T>}
      */
-    BowerManager.prototype.search = function (query) {
-        var defer = q.defer(), logger = this.logger;
-        this.logger.info("BowerManager", "search packages for '" + query + "'...");
+    search(query) {
+        let defer = q.defer(), logger = this.logger;
+        this.logger.info("BowerManager", `search packages for '${query}'...`);
         this.bower.commands.search(query)
             .on("log", function () {
             debugger;
         })
             .on("error", function (e) {
             debugger;
-            logger.error("BowerManager", "fail on search packages. Term: " + query + ". Code: " + e.code + ", details: " + e.message);
+            logger.error("BowerManager", `fail on search packages. Term: ${query}. Code: ${e.code}, details: ${e.message}`);
             defer.reject(e);
         })
             .on("end", function (results) {
-            logger.info("BowerManager", "^gok^: search packages for '" + query + "'...");
+            logger.info("BowerManager", `^gok^: search packages for '${query}'...`);
             defer.resolve(results);
         });
         return defer.promise;
-    };
+    }
     /**
      * @description Obtiene los paquetes de bower
      * @param done  Callback a invocar si el proceso es satisfactorio
      * @param fail  Callback a invocar si el proceso falla
      */
-    BowerManager.prototype.listPackages = function () {
-        var logger = this.logger, defer = q.defer();
+    listPackages() {
+        let logger = this.logger, defer = q.defer();
         this.logger.info("BowerManager", "retriving packages...");
         this.bower.commands.list()
             .on("log", function (e) {
             debugger;
-            logger.trace("BowerManager", e.id + ": " + e.message);
+            logger.trace("BowerManager", `${e.id}: ${e.message}`);
         })
             .on("error", function (e) {
             debugger;
-            logger.error("BowerManager", "on retriving packages. Code: '" + e.code + "', details:'" + e.message + "'");
+            logger.error("BowerManager", `on retriving packages. Code: '${e.code}', details:'${e.message}'`);
             defer.reject(e);
         })
             .on("end", function (info) {
@@ -175,14 +175,14 @@ var BowerManager = (function () {
             defer.resolve(info);
         });
         return defer.promise;
-    };
+    }
     /**
      * @description Sobreescribe el fichero bower.json con el contenido indicado
      * @param config
      * @returns {IResult}
      */
-    BowerManager.prototype.setConfigFile = function (config) {
-        var defer = q.defer();
+    setConfigFile(config) {
+        let defer = q.defer();
         this.logger.info("BowerManager", "writting config file...");
         try {
             if (typeof config != "string") {
@@ -204,17 +204,17 @@ var BowerManager = (function () {
             this.logger.error("BowerManager", "fail on writting bower.json file:", e.details);
         }
         return defer.promise;
-    };
+    }
     /**
      * @description Verifica la existencia del fichero de configuración de bower
      */
-    BowerManager.prototype.getConfigFile = function () {
-        var defer = q.defer();
+    getConfigFile() {
+        let defer = q.defer();
         this.logger.info("BowerManager", "retriving config file...");
         this.fs.readFile("bower.json", { encoding: "utf8" }, function (error, data) {
             if (!error) {
                 try {
-                    var result = JSON.parse(data);
+                    let result = JSON.parse(data);
                     this.logger.info("BowerManager", "retriving config file...^gok^:");
                     defer.resolve(data);
                 }
@@ -237,8 +237,7 @@ var BowerManager = (function () {
             }
         }.bind(this));
         return defer.promise;
-    };
-    return BowerManager;
-}());
+    }
+}
 exports.BowerManager = BowerManager;
 //# sourceMappingURL=BowerManager.js.map
