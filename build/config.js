@@ -7,6 +7,20 @@ const config = {
     backend:{
         entry:path.resolve(base,'./src/index.js'),
         dist:'backend.js'
+    },
+    client:{
+        entry:{
+            app:[
+                path.resolve(base,'./src/client/App.tsx')
+            ],
+            vendor:[
+                "react",
+                "react-dom",
+                "react-router",
+                "material-ui"
+            ]
+        },
+        dist:'client.js'
     }
 };
 module.exports = config;

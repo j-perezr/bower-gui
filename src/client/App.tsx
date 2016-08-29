@@ -10,12 +10,12 @@ export interface AppProps { }
 export class App extends React.Component<AppProps, {}> {
     render() {
         return <div className="wrapper">
-                    <div className="row">
-                        <div className="col-xs">
-                            {this.props.children}
-                        </div>
-                    </div>
+            <div className="row">
+                <div className="col-xs">
+                    {this.props.children}
                 </div>
+            </div>
+        </div>
     }
 }
 ReactDOM.render(

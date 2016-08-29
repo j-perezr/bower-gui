@@ -1,16 +1,12 @@
 const gulp = require("gulp");
-const gutil = require("gulp-util");
+const fs = require("fs");
+const path = require("path");
+const config = require("../config");
 gulp.task("client",function(){
-    const utils = require("./../common/utils");
-    const defaults = require("./../webpack.config-defaults.js");
     const webpack = require("webpack-stream");
-    const config = require("./../config.js");
     let webpackConfig = require("./webpack.config-client.js");
-    let clientConfig = utils.getConfig(defaults, webpackConfig);
-    //webpackConfig.watch = true;
-    return gulp.src('src/client/App.tsx')
-        .pipe(webpack(clientConfig))
-        .on('error', gutil.log)
+    return gulp.src(config.client.entry.app[0])
+        .pipe(webpack(webpackConfig))
         .pipe(gulp.dest(config.dist));
 });
 
