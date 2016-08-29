@@ -1,18 +1,30 @@
-const WriteFilePlugin = require('write-file-webpack-plugin');
-const WebpackExecute = require("./WebpackExecute");
-const backendConfig = {
-    entry: './src/index.js',
+const path = require('path');
+const config = require('../config');
+module.exports = {
+    devtool : 'source-map',
     target: 'node',
+    watch: true,
+    context: config.base,
+    entry: config.backend.entry,
     output: {
-        filename: 'dist/backend.js'
+        path: config.dist,
+        filename: config.backend.dist
     },
-    devServer: {
-        outputPath: 'dist/backend.js'
+    resolve: {
+        extensions: ['', '.js', '.ts', '.tsx', '.css'],
     },
-    externals:null,
-    plugins:[
-        new WriteFilePlugin(),
-        new WebpackExecute()
-    ]
+    module: {
+        loaders: [
+            { test: /\.tsx?$/, loaders: ['ts-loader']},
+            { test: /\.json$/, loader: 'json-loader' }
+        ]
+    },
+    externals:[],
+    plugins: [],
+    node: {
+        console: 'empty',
+        fs: 'empty',
+        net: 'empty',
+        tls: 'empty'
+    }
 };
-module.exports = backendConfig;

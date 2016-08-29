@@ -9,9 +9,9 @@ program
     .option('-p, --port <n>', 'Port for express server (default to 8081)', parseInt)
     .option('-P, --socket-port <n>', 'Port for socket server (default 8082)',parseInt)
     .parse(process.argv);
-new server.Server({
+var serverInstance = new server.Server({
     port:program.port,
     socketPort:program.socketPort
 },bower);
 //open default browser
-open("http://localhost:"+port+"/dist/index.html");
+open("http://localhost:"+serverInstance.config.port+"/dist/index.html");
