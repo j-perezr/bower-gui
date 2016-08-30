@@ -5,6 +5,7 @@ import { Router, IndexRoute, Route, Link, hashHistory } from 'react-router';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import { Bower } from "./bower/Bower";
 require("./index.html");
+require("../../node_modules/normalize.css/normalize.css");
 require("../../node_modules/flexboxgrid/dist/flexboxgrid.css");
 export interface AppProps { }
 export class App extends React.Component<AppProps, {}> {
@@ -12,7 +13,6 @@ export class App extends React.Component<AppProps, {}> {
         return <div className="wrapper">
             <div className="row">
                 <div className="col-xs">
-                    {this.props.children}
                 </div>
             </div>
         </div>
