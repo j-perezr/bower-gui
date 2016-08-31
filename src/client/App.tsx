@@ -1,12 +1,18 @@
 ///<reference path="typings/index.d.ts"/>
 import * as React from "react";
 import * as ReactDOM from "react-dom";
-import { Router, IndexRoute, Route, Link, hashHistory } from 'react-router';
+import * as log from "loglevel";
+import { LogPrefix } from "./common/LogPrefix";
+import { Router, Route, hashHistory, Link } from 'react-router'
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import { Bower } from "./bower/Bower";
 require("./index.html");
 require("../../node_modules/normalize.css/normalize.css");
 require("../../node_modules/flexboxgrid/dist/flexboxgrid.css");
+//config log
+log.setDefaultLevel(0);
+new LogPrefix(log.getLogger("client"));
+
 export interface AppProps { }
 export class App extends React.Component<AppProps, {}> {
     render() {
