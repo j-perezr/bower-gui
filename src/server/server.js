@@ -1,12 +1,13 @@
 "use strict";
+/// <reference path="../../typings/index.d.ts" />
 const express = require("express");
 const path = require("path");
 const BowerSrv_1 = require("./bower/BowerSrv");
-const Logger = require("./common/Logger");
 const bodyParser = require("body-parser");
 const Socket = require("socket.io");
 const http = require("http");
-const logger = Logger.getLogger("server", { saveInFile: true });
+const Logger_1 = require("./common/Logger");
+const logger = Logger_1.Logger.getLogger("server", { saveInFile: true });
 /**
  * @class Server
  * @description Inicializa el servidor con la api erst
@@ -32,7 +33,7 @@ class Server {
         logger.info("Server", "Running on port", this.config.port);
         logger.info("Server", "Socket listening on port", this.config.socketPort);
         //start bower server
-        BowerSrv_1.default.getInstance(this.io);
+        let bws = new BowerSrv_1.default(this.io);
     }
 }
 Server.DEFAULTS = {

@@ -28,7 +28,6 @@ export abstract class BaseSrv{
         connected:2,
         reconnecting:3
     };
-    protected options:IBaseSrvOptions;//options of service
     protected socket:SocketIO.Socket;
     protected state:number=BaseSrv.STATES.disconnected;
     protected log;
@@ -40,13 +39,8 @@ export abstract class BaseSrv{
      * @param {Number}  options.port     Port of server socket
      * @param {String}  options.name     Base for events to manage
      */
-    constructor (options:IBaseSrvOptions){
+    constructor (protected options:IBaseSrvOptions){
         this.log = log.getLogger("client");
-        this.options = {
-            url:options.url,
-            name:options.name,
-            socketOptions:options.socketOptions
-        };
 
     }
 
@@ -89,12 +83,7 @@ export abstract class BaseSrv{
         }
         return deferred.promise();
     }
-    protected _registerEvents (){
-        let that = this;
-        if(this.socket){
-
-        }
-    }
+    protected abstract _registerEvents;
     public disconnect(){
 
     }

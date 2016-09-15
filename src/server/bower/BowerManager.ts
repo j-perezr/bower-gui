@@ -1,4 +1,5 @@
-import * as logger from "../common/Logger";
+/// <reference path="../../../typings/index.d.ts" />
+import {Logger} from "../common/Logger";
 import * as q from "q";
 import * as fs from "fs";
 export interface IError {
@@ -29,7 +30,7 @@ export class BowerManager {
     protected logger;
 
     constructor(protected bower, protected fs) {
-        this.logger = logger.getLogger("server");
+        this.logger = Logger.getLogger("server");
     }
     public installAll(options){
         let defer = q.defer(),

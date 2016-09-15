@@ -1,21 +1,30 @@
-"use strict";
 /// <reference path="../../../typings/index.d.ts" />
 let instances = {};
 let fs = require("fs");
 let path = require("path");
 const LEVELS = {
-    NONE: 0,
-    ERROR: 1,
-    WARN: 2,
-    INFO: 3,
-    DEBUG: 4,
-    ALL: 5
+    NONE:0,
+    ERROR:1,
+    WARN:2,
+    INFO:3,
+    DEBUG:4,
+    ALL:5
 };
 const defaults = {
-    level: LEVELS.DEBUG,
-    logPath: path.resolve(process.cwd(), "logs")
+    level:LEVELS.DEBUG,
+    logPath:path.resolve(process.cwd(),"logs")
 };
-class LogMessage {
+
+class LogMessage{
+    protected logPath;
+    protected date;
+    protected terminal;
+    protected level;
+    protected context;
+    protected originalMsg;
+    protected msg;
+    protected location;
+    protected position;
     /**
      *
      * @param params
@@ -26,7 +35,8 @@ class LogMessage {
      * @param params.saveInFile     Save automatically in a file
      * @param [params.logPath=logs] Path where save logs
      */
-    constructor(params) {
+    constructor(params){
+        
         this.logPath = params.logPath || defaults.logPath;
         this.date = new Date();
         this.terminal = params.terminal;
@@ -34,36 +44,35 @@ class LogMessage {
         this.level = params.level;
         this.context = params.context;
         this.originalMsg = this._parseMessage(params.msg);
-        this.msg = this._prepareMsg(this.context, this.originalMsg);
-        this.terminal((params.breakLine !== false ? "\n" : "") + this.msg);
-        if (params.saveInFile) {
+        this.msg = this._prepareMsg(this.context,this.originalMsg);
+        this.terminal((params.breakLine !== false ? "\n": "")+this.msg);
+        if(params.saveInFile){
             this.file();
         }
     }
-    _saveLocation(error, x, y) {
-        if (!error) {
+    _saveLocation(error,x,y){
+        if(!error){
             this.location = {
-                x: x,
-                y: y
-            };
+                x:x,
+                y:y
+            }
         }
     }
-    _parseMessage(msg) {
+    _parseMessage (msg:any){
         let parsedMsg = "";
-        if (Array.isArray(msg)) {
+        if(Array.isArray(msg)) {
             for (var msgIndex = 0, msgLength = msg.length; msgIndex < msgLength; msgIndex++) {
                 var currentMsg = msg[msgIndex];
                 if (typeof currentMsg == "object") {
                     try {
                         msg[msgIndex] = JSON.stringify(currentMsg, null, 4);
-                    }
-                    catch (e) {
+                    } catch (e) {
+
                     }
                 }
             }
             parsedMsg = msg.join(" ");
-        }
-        else {
+        }else{
             parsedMsg = msg;
         }
         return parsedMsg;
@@ -76,24 +85,24 @@ class LogMessage {
      * @returns {Array.<*>}
      * @private
      */
-    _prepareMsg(context, msg) {
+    _prepareMsg(context,msg){
         let type;
-        switch (this.level) {
+        switch(this.level){
             case LEVELS.ERROR:
-                type = "^r[ERROR]^:";
+                type="^r[ERROR]^:";
                 break;
             case LEVELS.INFO:
-                type = "^C[INFO]^:";
+                type="^C[INFO]^:";
                 break;
             case LEVELS.WARN:
-                type = "^y[DEBUG]^:";
+                type="^y[DEBUG]^:";
                 break;
             case LEVELS.DEBUG:
-                type = "^Y[DEBUG]^:";
+                type="^Y[DEBUG]^:";
                 break;
         }
         var time = this.date.toISOString();
-        return [type, time.substr(time.indexOf("T") + 1), "^C[" + context + "]^:", msg].join(" ");
+        return [type,time.substr(time.indexOf("T")+1),"^C["+context+"]^:",msg].join(" ");
     }
     /**
      *
@@ -101,35 +110,43 @@ class LogMessage {
      * @returns {Function}
      * @private
      */
-    continue(...newText) {
-        if (this.position) {
-            newText = this._parseMessage(newText);
-            this.terminal.saveCursor().moveTo(this.position.x, this.position.y)(newText).restoreCursor();
+    continue(...newText){
+        if(this.position) {
+            for (var textIndex = 0; textIndex < newText.length; textIndex++) {
+                newText[textIndex] = this._parseMessage(newText[textIndex]);
+
+            }
+            this.terminal.saveCursor().moveTo(this.position.x,this.position.y)(newText.join(" ")).restoreCursor();
         }
     }
-    file() {
-        let date = this.date, day = date.getDate(), year = date.getFullYear(), month = date.getMonth() + 1, hour = date.getHours(), route = path.resolve(this.logPath);
-        if (!fs.existsSync(route)) {
+    file(){
+        let date = this.date,
+            day = date.getDate(),
+            year = date.getFullYear(),
+            month = date.getMonth()+1,
+            hour = date.getHours(),
+            route = path.resolve(this.logPath);
+        if(!fs.existsSync(route)){
             fs.mkdirSync(route);
         }
-        route = path.resolve(route, year.toString());
-        if (!fs.existsSync(route)) {
+        route = path.resolve(route,year.toString());
+        if(!fs.existsSync(route)){
             fs.mkdirSync(route);
         }
-        route = path.resolve(route, month.toString());
-        if (!fs.existsSync(route)) {
+        route = path.resolve(route,month.toString());
+        if(!fs.existsSync(route)){
             fs.mkdirSync(route);
         }
-        route = path.resolve(route, day.toString());
-        if (!fs.existsSync(route)) {
+        route = path.resolve(route,day.toString());
+        if(!fs.existsSync(route)){
             fs.mkdirSync(route);
         }
-        route = path.resolve(route, hour.toString() + ".txt");
-        fs.appendFile(route, this.msg + "\n", this._onWrite.bind(this));
+        route = path.resolve(route,hour.toString()+".txt");
+        fs.appendFile(route,this.msg+"\n",this._onWrite.bind(this));
     }
-    _onWrite(e) {
-        if (e) {
-            console.error("[Logger]", `Error on write file:${e}`);
+    _onWrite(e){
+        if(e) {
+            console.error("[Logger]", `Error on write file:${e}`)
         }
     }
 }
@@ -138,8 +155,10 @@ class LogMessage {
  * @description Sistema de logging
  * @requires cli-color
  */
-class Logger {
-    constructor(config) {
+export class Logger{
+    protected terminal;
+    protected config;
+    constructor(config){
         this.setConfig(config);
         this.terminal = require("terminal-kit").terminal;
     }
@@ -153,13 +172,13 @@ class Logger {
      * continueLog("y más","mensaje")
      * [ERROR] 2016-07-02T12:29:38.174Z [Contexto] mensaje en error y más mensaje
      */
-    error(context, ...msg) {
+    error (context,...msg){
         let message = new LogMessage({
-            terminal: this.terminal,
-            level: LEVELS.ERROR,
-            context: context,
-            msg: msg,
-            saveInFile: this.config.saveInFile
+            terminal:this.terminal,
+            level:LEVELS.ERROR,
+            context:context,
+            msg:msg,
+            saveInFile:this.config.saveInFile
         });
         return message;
     }
@@ -173,13 +192,13 @@ class Logger {
      * continueLog("y más","mensaje")
      * [WARN] 2016-07-02T12:29:38.174Z [Contexto] mensaje en warn y más mensaje
      */
-    warn(context, ...msg) {
+    warn (context,...msg){
         let message = new LogMessage({
-            terminal: this.terminal,
-            level: LEVELS.WARN,
-            context: context,
-            msg: msg,
-            saveInFile: this.config.saveInFile
+            terminal:this.terminal,
+            level:LEVELS.WARN,
+            context:context,
+            msg:msg,
+            saveInFile:this.config.saveInFile
         });
         return message;
     }
@@ -193,13 +212,13 @@ class Logger {
      * continueLog("y más","mensaje")
      * [INFO] 2016-07-02T12:29:38.174Z [Contexto] mensaje en info y más mensaje
      */
-    info(context, ...msg) {
+    info (context,...msg){
         let message = new LogMessage({
-            terminal: this.terminal,
-            level: LEVELS.INFO,
-            context: context,
-            msg: msg,
-            saveInFile: this.config.saveInFile
+            terminal:this.terminal,
+            level:LEVELS.INFO,
+            context:context,
+            msg:msg,
+            saveInFile:this.config.saveInFile
         });
         return message;
     }
@@ -213,29 +232,29 @@ class Logger {
      * continueLog("y más","mensaje")
      * [TRACE] 2016-07-02T12:29:38.174Z [Contexto] mensaje en error y más mensaje
      */
-    trace(context, ...msg) {
+    trace (context,...msg){
         let message = new LogMessage({
-            terminal: this.terminal,
-            level: LEVELS.DEBUG,
-            context: context,
-            msg: msg,
-            saveInFile: this.config.saveInFile
+            terminal:this.terminal,
+            level:LEVELS.DEBUG,
+            context:context,
+            msg:msg,
+            saveInFile:this.config.saveInFile
         });
         return message;
     }
+
     /**
      * @description Actualiza la configuración del logger
      * @param config
      */
-    setConfig(config) {
+    setConfig(config){
         this.config = config;
     }
-    static getLogger(name, config) {
-        if (!instances[name]) {
+    public static getLogger(name,config?){
+        if(!instances[name]){
             instances[name] = new Logger(config);
         }
         return instances[name];
     }
+
 }
-exports.Logger = Logger;
-//# sourceMappingURL=Logger.js.map

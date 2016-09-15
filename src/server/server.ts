@@ -1,10 +1,11 @@
+/// <reference path="../../typings/index.d.ts" />
 import * as express from "express";
 import * as path from "path";
 import BowerSrv from "./bower/BowerSrv";
-import * as Logger from "./common/Logger";
 import * as bodyParser from "body-parser";
 import * as Socket from "socket.io";
 import * as http from "http";
+import {Logger} from "./common/Logger";
 const logger = Logger.getLogger("server",{saveInFile:true});
 export interface IServerConfig{
     port:number;
@@ -44,6 +45,6 @@ export class Server {
         logger.info("Server","Running on port",this.config.port);
         logger.info("Server","Socket listening on port",this.config.socketPort);
         //start bower server
-        BowerSrv.getInstance(this.io);
+        let bws = new BowerSrv(this.io);
     }
 }

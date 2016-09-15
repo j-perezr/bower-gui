@@ -1,11 +1,15 @@
 {
-    "compilerOptions": {
-        "module": "commonjs",
-        "moduleResolution": "node",
-        "target": "es6",
-        "sourceMap": true
-    },
-    "exclude": [
-        "../."
+    "mapRoot": "./",
+    "module": "es6",
+    "moduleResolution": "node",
+    "noEmitOnError": false,
+    "noImplicitAny": false,
+    "sourceMap": true,
+    "target": "es6",
+    "typeRoots": [
+        "../node_modules/@types"
+    ],
+    "types": [
+        "core-js"
     ]
 }

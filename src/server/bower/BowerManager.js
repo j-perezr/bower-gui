@@ -1,5 +1,6 @@
 "use strict";
-const logger = require("../common/Logger");
+/// <reference path="../../../typings/index.d.ts" />
+const Logger_1 = require("../common/Logger");
 const q = require("q");
 /**
  * @class BowerManager
@@ -9,7 +10,7 @@ class BowerManager {
     constructor(bower, fs) {
         this.bower = bower;
         this.fs = fs;
-        this.logger = logger.getLogger("server");
+        this.logger = Logger_1.Logger.getLogger("server");
     }
     installAll(options) {
         let defer = q.defer(), logger = this.logger;
