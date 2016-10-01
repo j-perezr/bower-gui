@@ -1,14 +1,34 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <meta charset="UTF-8" />
-        <title>Hello React!</title>
-        <link rel="stylesheet" type="text/css" href="./styles.css"/>
+        <meta charset="UTF-8">
+        <meta meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <!--build:css styles.css-->
+        <link rel="stylesheet" href="test.css">
+        <!--endbuild-->
     </head>
     <body>
-        <main id="main"></main>
-        <!-- Main -->
-        <script src="./vendor.js"></script>
-        <script src="./client.js"></script>
+        <!--if lte IE 10
+        p.browsehappy
+        | You are using an
+        strong outdated
+        |                                  browser. Please
+        a(href='http://browsehappy.com/') upgrade your browser
+        |                                  to improve your experience.
+
+        -->
+        <div data-ui-view></div>
+        <!--build:jsVendor vendor.js-->
+        <script type="text/javascript" src="./bower_components/socket.io-client/socket.io.js"></script>
+        <!--endbuild-->
+        <!--build:js app.js-->
+        <!--endbuild-->
+        <script>
+            var socket = io('http://localhost:8082/bower');
+            socket.emit('bower.packages.get');
+            socket.on('bower.packages.get', function (data) {
+                console.log(data);
+            });
+        </script>
     </body>
 </html>

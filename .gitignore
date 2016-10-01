@@ -1,8 +1,6 @@
 node_modules/
 .idea/
-bower.json
-bower_components/
 dist/
-typings/
-src/bower_components/
+src/client/bower_components/
 /logs/
+

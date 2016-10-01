@@ -1,12 +1,13 @@
 {
     "compilerOptions": {
         "module": "commonjs",
-        "target": "es5",
+        "target": "es6",
         "sourceMap": true
     },
     "exclude": [
         ".",
         "bower_components",
-        "build"
+        "build",
+        "node_modules"
     ]
 }
