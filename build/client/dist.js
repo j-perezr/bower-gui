@@ -4,7 +4,7 @@ const gutil = require("gulp-util");
 const config = require("./config");
 gulp.task("client-dist",gulpsync.sync([
     'client-clean-dist',
-    ["client-typescript:build","sass:build",'copy-bower-assets'],
+    ["client-typescript:build","sass:build",'pug:build','copy-bower-assets'],
     (config.production ? 'usemin:dist' : "usemin:build")
 ]));
 

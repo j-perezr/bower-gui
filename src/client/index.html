@@ -1,34 +1,35 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="UTF-8">
-        <meta meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <!--build:css styles.css-->
-        <link rel="stylesheet" href="test.css">
-        <!--endbuild-->
-    </head>
-    <body>
-        <!--if lte IE 10
-        p.browsehappy
-        | You are using an
-        strong outdated
-        |                                  browser. Please
-        a(href='http://browsehappy.com/') upgrade your browser
-        |                                  to improve your experience.
-
-        -->
-        <div data-ui-view></div>
-        <!--build:jsVendor vendor.js-->
-        <script type="text/javascript" src="./bower_components/socket.io-client/socket.io.js"></script>
-        <!--endbuild-->
-        <!--build:js app.js-->
-        <!--endbuild-->
-        <script>
-            var socket = io('http://localhost:8082/bower');
-            socket.emit('bower.packages.get');
-            socket.on('bower.packages.get', function (data) {
-                console.log(data);
-            });
-        </script>
-    </body>
+  <head>
+    <meta charset="UTF-8">
+    <meta meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!--build:cssVendor styles.css-->
+    <link rel="stylesheet" href="./bower_components/angular/angular-csp.css">
+    <link rel="stylesheet" href="./bower_components/angular-material/angular-material.css">
+    <!--endbuild-->
+    <!--build:css styles.css-->
+    <!--endbuild-->
+  </head>
+  <body>
+    <!--if lte IE 10
+    <p class="browsehappy">You are using an strong outdated browser. Please <a href='http://browsehappy.com/'>upgrade your browser to improve your experience.</a></p>
+    
+    -->
+    <div data-ui-view></div>
+    <!--build:jsVendor vendor.js-->
+    <script type="text/javascript" src="./bower_components/angular/angular.js"></script>
+    <script type="text/javascript" src="./bower_components/angular-animate/angular-animate.js"></script>
+    <script type="text/javascript" src="./bower_components/angular-aria/angular-aria.js"></script>
+    <script type="text/javascript" src="./bower_components/angular-ui-router/release/angular-ui-router.js"></script>
+    <script type="text/javascript" src="./bower_components/angular-material/angular-material.js"></script>
+    <script type="text/javascript" src="./bower_components/socket.io-client/socket.io.js"></script>
+    <!--endbuild-->
+    <!--build:js app.js-->
+    <script type="text/javascript" src="./app/common/_BaseCtrl.js"></script>
+    <script type="text/javascript" src="./app/common/services/_BaseSrv.js"></script>
+    <script type="text/javascript" src="./app/common/Localizer.js"></script>
+    <script type="text/javascript" src="./app/routes.js"></script>
+    <script type="text/javascript" src="./app/app.js"></script>
+    <!--endbuild-->
+  </body>
 </html>

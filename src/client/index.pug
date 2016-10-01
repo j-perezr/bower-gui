@@ -1,0 +1,32 @@
+doctype
+html
+    head
+        meta(charset="UTF-8")
+        meta(meta name="viewport" content="width=device-width, initial-scale=1.0")
+        //build:cssVendor styles.css
+        link(rel="stylesheet" href="./bower_components/angular/angular-csp.css")
+        link(rel="stylesheet" href="./bower_components/angular-material/angular-material.css")
+        //endbuild
+        //build:css styles.css
+
+        //endbuild
+    body
+        //if lte IE 10
+            <p class="browsehappy">You are using an strong outdated browser. Please <a href='http://browsehappy.com/'>upgrade your browser to improve your experience.</a></p>
+
+        div(data-ui-view)
+        //build:jsVendor vendor.js
+        script(type="text/javascript" src="./bower_components/angular/angular.js")
+        script(type="text/javascript" src="./bower_components/angular-animate/angular-animate.js")
+        script(type="text/javascript" src="./bower_components/angular-aria/angular-aria.js")
+        script(type="text/javascript" src="./bower_components/angular-ui-router/release/angular-ui-router.js")
+        script(type="text/javascript" src="./bower_components/angular-material/angular-material.js")
+        script(type="text/javascript" src="./bower_components/socket.io-client/socket.io.js")
+        //endbuild
+        //build:js app.js
+        script(type="text/javascript" src="./app/common/_BaseCtrl.js")
+        script(type="text/javascript" src="./app/common/services/_BaseSrv.js")
+        script(type="text/javascript" src="./app/common/Localizer.js")
+        script(type="text/javascript" src="./app/routes.js")
+        script(type="text/javascript" src="./app/app.js")
+        //endbuild
