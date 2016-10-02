@@ -140,7 +140,7 @@ module localizer {
             return deferred.promise;
         }
     }
-    let localizerModule = angular.module("Localizer");
+    let localizerModule = angular.module("Localizer",[]);
     localizerModule.service( 'localizerSrv',LocalizerSrv);
     /**
      * Gestiona la carga de ficheros de idioma para los diferentes módulos que lo requieran

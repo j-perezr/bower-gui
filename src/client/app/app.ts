@@ -1,10 +1,12 @@
+import {SocketIO} from "@types/socket.io-client";
+import {IOperationResult} from "../../backend/bower/BowerManager";
 module bowergui {
     'use strict';
     /**
      * @module bowergui
      * @description Módulo principal
      */
-    export const bowerguiModule = angular.module("bowergui",
+    export let bowerguiModule = angular.module("bowergui",
         [
             'Localizer',
             'ngAnimate',
@@ -44,11 +46,10 @@ module bowergui {
             glToParams = toParams;
             glToState = toState;
         });
+
     });
     bowerguiModule.config(['$translateProvider', function($translateProvider) {
         $translateProvider.useLoader("localizerPrv",{});//se establece el provider para la carga de $translate
         $translateProvider.useSanitizeValueStrategy('escape');
     }]);
 }
-
-

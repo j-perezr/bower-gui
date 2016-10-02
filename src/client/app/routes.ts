@@ -4,7 +4,7 @@
  */
 module bowergui {
     "use strict";
-    bowerguiModule.config( function ( $stateProvider, $urlRouterProvider ) {
+    bowergui.bowerguiModule.config( function ( $stateProvider, $urlRouterProvider ) {
         /**
          * @property audiovisual
          * @description Marco común

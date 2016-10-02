@@ -1,5 +1,5 @@
 let path = require('path');
-let server = require("./backend/server");
+let server = require("./src/backend/server");
 // Parse command line options
 let program = require('commander');
 let bower = require("bower");

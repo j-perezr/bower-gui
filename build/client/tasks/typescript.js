@@ -13,5 +13,5 @@ gulp.task("client-typescript:build", function () {
 });
 gulp.task('client-typescript:watch', function () {
     gutil.log("Waiting for ts changes");
-    gulp.watch(tsFiles, ['typescript:build']);
+    gulp.watch(tsFiles, ['client-typescript:build']);
 });

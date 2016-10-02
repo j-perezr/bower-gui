@@ -4,7 +4,7 @@
   "description": "Interface to manage bower packages",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node index.js"
   },
   "repository": "https://github.com/jperezruiz/bower-gui.git",
   "keywords": [
@@ -21,6 +21,7 @@
     "@types/jquery": "^2.0.32",
     "@types/q": "0.0.31",
     "@types/socket.io": "^1.4.27",
+    "@types/socket.io-client": "^1.4.27",
     "gulp": "^3.9.1",
     "gulp-clean": "^0.3.2",
     "gulp-cli": "^1.2.2",
