@@ -14,15 +14,17 @@ module bowergui {
             'ui.router',
             'ngSanitize',
             'pascalprecht.translate',
-            'toastr'
+            'ngMaterial',
+            'Toast'
         ]);
+
     bowerguiModule.run(function ($rootScope,
                                  $state,
                                  $stateParams,
                                  $translate,
                                  $q,
                                  localizerSrv,
-                                 toastr) {
+                                 ToastPrv) {
         let glToParams,
             glToState,
             removeStateChangeListener;
@@ -34,8 +36,10 @@ module bowergui {
             $state.go(glToState.name,glToParams);
         },function(result){
             //si no se carga el idioma indicado mostramos un error
+            ToastPrv.open({
+                message:"Error"
+            })
             $translate(["AUDIOVISUAL.COMMON.ERRORS.CAN_NOT_LOAD_LANGUAGES"]).then(function(messages){
-                toastr.error(messages);
             });
             //en caso de no poder cargarse el idioma seleccionado, se carga uno por defecto
             processLangDeferred.resolve(result.lang);

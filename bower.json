@@ -1,32 +1,36 @@
 {
-    "name": "bower-gui",
-    "description": "Interface to manage bower packages",
-    "main": "index.js",
-    "authors": [
-        "Javier Perez Ruiz"
-    ],
-    "license": "MIT",
-    "keywords": [
-        "bower"
-    ],
-    "homepage": "",
-    "ignore": [
-        "**/.*",
-        "node_modules",
-        "bower_components",
-        "test",
-        "tests"
-    ],
-    "dependencies": {
-        "socket.io-client": "^1.4.8",
-        "angular": "^1.5.8",
-        "angular-ui-router": "@types/angular-ui-router#^0.3.1",
-        "angular-material": "^1.1.1",
-        "jquery": "^3.1.1",
-        "angular-translate": "^2.12.1"
-    },
-    "devDependencies": {
-        "angular-ui-router": "@types/angular-ui-router#^0.3.1",
-        "angular": "@types/angular#^1.5.8"
-    }
+  "name": "bower-gui",
+  "description": "Interface to manage bower packages",
+  "main": "index.js",
+  "authors": [
+    "Javier Perez Ruiz"
+  ],
+  "license": "MIT",
+  "keywords": [
+    "bower"
+  ],
+  "homepage": "",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "socket.io-client": "^1.4.8",
+    "angular": "^1.5.8",
+    "angular-ui-router": "@types/angular-ui-router#^0.3.1",
+    "angular-material": "^1.1.1",
+    "jquery": "^3.1.1",
+    "angular-translate": "^2.12.1",
+    "angular-message-format": "^1.5.8",
+    "angular-animate": "^1.5.8",
+    "angular-sanitize": "^1.5.8",
+    "font-awesome": "^4.6.3"
+  },
+  "devDependencies": {
+    "angular-ui-router": "@types/angular-ui-router#^0.3.1",
+    "angular": "@types/angular#^1.5.8"
+  }
 }

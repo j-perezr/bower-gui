@@ -1,12 +1,12 @@
 "use strict";
-const Logger_1 = require("../common/Logger");
-const path = require("path");
+var Logger_1 = require("../common/Logger");
+var path = require("path");
 /**
  * @class BowerManager
  * @description Servicios de bower que otorgan la api rest
  */
-class BowerManager {
-    constructor(bower, fs) {
+var BowerManager = (function () {
+    function BowerManager(bower, fs) {
         this.bower = bower;
         this.fs = fs;
         this.logger = Logger_1.Logger.getLogger("server");
@@ -16,31 +16,32 @@ class BowerManager {
      * @param {IOperationOptions}   options     Options
      * @see https://bower.io/docs/api/#install
      */
-    installAll(options = {}) {
-        let logger = this.logger;
-        this.logger.info("BowerManager", `attempting to install all packages...`);
+    BowerManager.prototype.installAll = function (options) {
+        if (options === void 0) { options = {}; }
+        var logger = this.logger;
+        this.logger.info("BowerManager", "attempting to install all packages...");
         this.bower.commands.install([], options.config)
             .on("log", function (log) {
             debugger;
             if (log.id == "cached") {
-                logger.trace("BowerManager", `^cFound cache^:, package: ${log.data.resolver.name}, source: ${log.data.resolver.source}, target: ${log.data.resolver.target}`);
+                logger.trace("BowerManager", "^cFound cache^:, package: " + log.data.resolver.name + ", source: " + log.data.resolver.source + ", target: " + log.data.resolver.target);
             }
             else if (log.id == "install") {
-                logger.info("BowerManager", `^c${log.id}^: ${log.message}`);
+                logger.info("BowerManager", "^c" + log.id + "^: " + log.message);
             }
             else {
-                logger.trace("BowerManager", `^c${log.id}^: ${log.message}`);
+                logger.trace("BowerManager", "^c" + log.id + "^: " + log.message);
             }
             if (options.progress) {
-                let notify = {
+                var notify = {
                     log: log
                 };
-                let result = {
+                var result = {
                     error: null,
                     result: null,
                     notify: notify
                 };
-                let operationResult = {
+                var operationResult = {
                     result: result,
                     shared: options.share
                 };
@@ -49,19 +50,19 @@ class BowerManager {
         })
             .on("error", function (e) {
             debugger;
-            logger.error("BowerManager", ` fail on install all packages. Code: ${e.code}, details: ${e.message}`);
+            logger.error("BowerManager", " fail on install all packages. Code: " + e.code + ", details: " + e.message);
             if (options.error) {
-                let error = {
+                var error = {
                     code: e.code,
                     message: e.message,
                     error: e
                 };
-                let result = {
+                var result = {
                     error: error,
                     result: null,
                     notify: null
                 };
-                let operationResult = {
+                var operationResult = {
                     result: result,
                     shared: options.share
                 };
@@ -70,52 +71,53 @@ class BowerManager {
         })
             .on("end", function (results) {
             debugger;
-            logger.info("BowerManager", `^gok^: Packages installed`);
+            logger.info("BowerManager", "^gok^: Packages installed");
             if (options.done) {
-                let result = {
+                var result = {
                     error: null,
                     result: results,
                     notify: null
                 };
-                let operationResult = {
+                var operationResult = {
                     result: result,
                     shared: options.share
                 };
                 options.done(operationResult);
             }
         });
-    }
+    };
     /**
      * @description Attempt to install a package
      * @param {String}              name        Name of the package to install
      * @param {IOperationOptions}   options     Options
      * @see https://bower.io/docs/api/#install
      */
-    install(name, options = {}) {
-        let logger = this.logger;
-        this.logger.info("BowerManager", `attempting to install the package '${name}'...`);
+    BowerManager.prototype.install = function (name, options) {
+        if (options === void 0) { options = {}; }
+        var logger = this.logger;
+        this.logger.info("BowerManager", "attempting to install the package '" + name + "'...");
         this.bower.commands.install([name], options.config)
             .on("log", function (log) {
             debugger;
             if (log.id == "cached") {
-                logger.trace("BowerManager", `^cFound cache^:, package: ${log.data.resolver.name}, source: ${log.data.resolver.source}, target: ${log.data.resolver.target}`);
+                logger.trace("BowerManager", "^cFound cache^:, package: " + log.data.resolver.name + ", source: " + log.data.resolver.source + ", target: " + log.data.resolver.target);
             }
             else if (log.id == "install") {
-                logger.info("BowerManager", `^c${log.id}^: ${log.message}`);
+                logger.info("BowerManager", "^c" + log.id + "^: " + log.message);
             }
             else {
-                logger.trace("BowerManager", `^c${log.id}^: ${log.message}`);
+                logger.trace("BowerManager", "^c" + log.id + "^: " + log.message);
             }
             if (options.progress) {
-                let notify = {
+                var notify = {
                     log: log
                 };
-                let result = {
+                var result = {
                     error: null,
                     result: null,
                     notify: notify
                 };
-                let operationResult = {
+                var operationResult = {
                     result: result,
                     shared: options.share
                 };
@@ -124,19 +126,19 @@ class BowerManager {
         })
             .on("error", function (e) {
             debugger;
-            logger.error("BowerManager", `fail on uninstall '${name}'. Code: ${e.code}, details: ${e.message}`);
+            logger.error("BowerManager", "fail on uninstall '" + name + "'. Code: " + e.code + ", details: " + e.message);
             if (options.error) {
-                let error = {
+                var error = {
                     code: e.code,
                     message: e.message,
                     error: e
                 };
-                let result = {
+                var result = {
                     error: error,
                     result: null,
                     notify: null
                 };
-                let operationResult = {
+                var operationResult = {
                     result: result,
                     shared: options.share
                 };
@@ -145,42 +147,43 @@ class BowerManager {
         })
             .on("end", function (results) {
             debugger;
-            logger.info("BowerManager", `^gok^: Package'${name}' installed`);
+            logger.info("BowerManager", "^gok^: Package'" + name + "' installed");
             if (options.done) {
-                let result = {
+                var result = {
                     error: null,
                     result: results,
                     notify: null
                 };
-                let operationResult = {
+                var operationResult = {
                     result: result,
                     shared: options.share
                 };
                 options.done(operationResult);
             }
         });
-    }
+    };
     /**
      * @description Attempt to uninstall a package
      * @param {String}              name        Name of the package to uninstall
      * @param {IOperationOptions}   options     Options
      * @https://bower.io/docs/api/#uninstall
      */
-    uninstall(name, options = {}) {
-        let logger = this.logger;
-        this.logger.info("BowerManager", `attempting to uninstall the package '${name}'...`);
+    BowerManager.prototype.uninstall = function (name, options) {
+        if (options === void 0) { options = {}; }
+        var logger = this.logger;
+        this.logger.info("BowerManager", "attempting to uninstall the package '" + name + "'...");
         this.bower.commands.uninstall([name], options)
             .on("log", function (log) {
             debugger;
             if (log.id == "not-installed") {
-                logger.warn("BowerManager", `'${name}' is not installed. Any change done`);
+                logger.warn("BowerManager", "'" + name + "' is not installed. Any change done");
                 if (options.done) {
-                    let result = {
+                    var result = {
                         error: null,
                         result: null,
                         notify: null
                     };
-                    let operationResult = {
+                    var operationResult = {
                         result: result,
                         shared: options.share
                     };
@@ -189,24 +192,24 @@ class BowerManager {
             }
             else {
                 if (log.id == "cached") {
-                    logger.trace("BowerManager", `^cFound cache^:, package: ${log.data.resolver.name}, source: ${log.data.resolver.source}, target: ${log.data.resolver.target}`);
+                    logger.trace("BowerManager", "^cFound cache^:, package: " + log.data.resolver.name + ", source: " + log.data.resolver.source + ", target: " + log.data.resolver.target);
                 }
                 else if (log.id == "install") {
-                    logger.info("BowerManager", `^c${log.id}^: ${log.message}`);
+                    logger.info("BowerManager", "^c" + log.id + "^: " + log.message);
                 }
                 else {
-                    logger.trace("BowerManager", `^c${log.id}^: ${log.message}`);
+                    logger.trace("BowerManager", "^c" + log.id + "^: " + log.message);
                 }
                 if (options.progress) {
-                    let notify = {
+                    var notify = {
                         log: log
                     };
-                    let result = {
+                    var result = {
                         error: null,
                         result: null,
                         notify: notify
                     };
-                    let operationResult = {
+                    var operationResult = {
                         result: result,
                         shared: options.share
                     };
@@ -216,19 +219,19 @@ class BowerManager {
         })
             .on("error", function (e) {
             debugger;
-            logger.error("BowerManager", `fail on uninstall '${name}'. Code: ${e.code}, details: ${e.message}`);
+            logger.error("BowerManager", "fail on uninstall '" + name + "'. Code: " + e.code + ", details: " + e.message);
             if (options.error) {
-                let error = {
+                var error = {
                     code: e.code,
                     message: e.message,
                     error: e
                 };
-                let result = {
+                var result = {
                     error: error,
                     result: null,
                     notify: null
                 };
-                let operationResult = {
+                var operationResult = {
                     result: result,
                     shared: options.share
                 };
@@ -237,49 +240,50 @@ class BowerManager {
         })
             .on("end", function (results) {
             debugger;
-            logger.info("BowerManager", `^gok^: Package '${name}' uninstalled`);
+            logger.info("BowerManager", "^gok^: Package '" + name + "' uninstalled");
             if (options.done) {
-                let result = {
+                var result = {
                     error: null,
                     result: results,
                     notify: null
                 };
-                let operationResult = {
+                var operationResult = {
                     result: result,
                     shared: options.share
                 };
                 options.done(operationResult);
             }
         });
-    }
+    };
     /**
      * @description Get info for a package
      * @param {String}              name        Name of the package to get info
      * @param {IOperationOptions}   options     Options
      * @see https://bower.io/docs/api/#info
      */
-    info(name, options = {}) {
-        let logger = this.logger;
-        this.logger.info("BowerManager", `retriving package info for '${name}'...`);
+    BowerManager.prototype.info = function (name, options) {
+        if (options === void 0) { options = {}; }
+        var logger = this.logger;
+        this.logger.info("BowerManager", "retriving package info for '" + name + "'...");
         this.bower.commands.info(name, options.config)
             .on("log", function (log) {
             debugger;
             if (log.id == "cached") {
-                logger.trace("BowerManager", `^cFound cache^:, package: ${log.data.resolver.name}, source: ${log.data.resolver.source}, target: ${log.data.resolver.target}`);
+                logger.trace("BowerManager", "^cFound cache^:, package: " + log.data.resolver.name + ", source: " + log.data.resolver.source + ", target: " + log.data.resolver.target);
             }
             else {
-                logger.trace("BowerManager", `^c${log.id}^: ${log.message}`);
+                logger.trace("BowerManager", "^c" + log.id + "^: " + log.message);
             }
             if (options.progress) {
-                let notify = {
+                var notify = {
                     log: log
                 };
-                let result = {
+                var result = {
                     error: null,
                     result: null,
                     notify: notify
                 };
-                let operationResult = {
+                var operationResult = {
                     result: result,
                     shared: options.share
                 };
@@ -290,24 +294,24 @@ class BowerManager {
             debugger;
             switch (e.code) {
                 case "ENOTFOUND":
-                    logger.warn("BowerManager", `Not found '${name}' package`);
+                    logger.warn("BowerManager", "Not found '" + name + "' package");
                     break;
                 default:
-                    logger.error("BowerManager", `fail on get info for '${name}'. Code: ${e.code}, details: ${e.message}`);
+                    logger.error("BowerManager", "fail on get info for '" + name + "'. Code: " + e.code + ", details: " + e.message);
                     break;
             }
             if (options.error) {
-                let error = {
+                var error = {
                     code: e.code,
                     message: e.message,
                     error: e
                 };
-                let result = {
+                var result = {
                     error: error,
                     result: null,
                     notify: null
                 };
-                let operationResult = {
+                var operationResult = {
                     result: result,
                     shared: options.share
                 };
@@ -315,48 +319,49 @@ class BowerManager {
             }
         })
             .on("end", function (results) {
-            logger.info("BowerManager", `^gok^: Retrived '${name}' package info`);
+            logger.info("BowerManager", "^gok^: Retrived '" + name + "' package info");
             if (options.done) {
-                let result = {
+                var result = {
                     error: null,
                     result: results,
                     notify: null
                 };
-                let operationResult = {
+                var operationResult = {
                     result: result,
                     shared: options.share
                 };
                 options.done(operationResult);
             }
         });
-    }
+    };
     /**
      * @description Search a package
      * @param {String}              query       Query to search
      * @param {IOperationOptions}   options     Options
      * @see https://bower.io/docs/api/#search
      */
-    search(query, options = {}) {
-        let logger = this.logger;
-        this.logger.info("BowerManager", `search packages for '${query}'...`);
+    BowerManager.prototype.search = function (query, options) {
+        if (options === void 0) { options = {}; }
+        var logger = this.logger;
+        this.logger.info("BowerManager", "search packages for '" + query + "'...");
         this.bower.commands.search(query, options.config)
             .on("log", function (log) {
             if (log.id == "cached") {
-                logger.trace("BowerManager", `^cFound cache^:, package: ${log.data.resolver.name}, source: ${log.data.resolver.source}, target: ${log.data.resolver.target}`);
+                logger.trace("BowerManager", "^cFound cache^:, package: " + log.data.resolver.name + ", source: " + log.data.resolver.source + ", target: " + log.data.resolver.target);
             }
             else {
-                logger.trace("BowerManager", `^c${log.id}^: ${log.message}`);
+                logger.trace("BowerManager", "^c" + log.id + "^: " + log.message);
             }
             if (options.progress) {
-                let notify = {
+                var notify = {
                     log: log
                 };
-                let result = {
+                var result = {
                     error: null,
                     result: null,
                     notify: notify
                 };
-                let operationResult = {
+                var operationResult = {
                     result: result,
                     shared: options.share
                 };
@@ -365,19 +370,19 @@ class BowerManager {
         })
             .on("error", function (e) {
             debugger;
-            logger.error("BowerManager", `fail on search packages. Term: ${query}. Code: ${e.code}, details: ${e.message}`);
+            logger.error("BowerManager", "fail on search packages. Term: " + query + ". Code: " + e.code + ", details: " + e.message);
             if (options.error) {
-                let error = {
+                var error = {
                     code: e.code,
                     message: e.message,
                     error: e
                 };
-                let result = {
+                var result = {
                     error: error,
                     result: null,
                     notify: null
                 };
-                let operationResult = {
+                var operationResult = {
                     result: result,
                     shared: options.share
                 };
@@ -385,43 +390,44 @@ class BowerManager {
             }
         })
             .on("end", function (results) {
-            logger.info("BowerManager", `^gok^: search packages for '${query}'...`);
+            logger.info("BowerManager", "^gok^: search packages for '" + query + "'...");
             if (options.done) {
-                let result = {
+                var result = {
                     error: null,
                     result: results,
                     notify: null
                 };
-                let operationResult = {
+                var operationResult = {
                     result: result,
                     shared: options.share
                 };
                 options.done(operationResult);
             }
         });
-    }
+    };
     /**
      * @description Get the packages
      * @param {IOperationOptions}   options     Options
      * @see https://bower.io/docs/api/#list
      */
-    listPackages(options = {}) {
-        let logger = this.logger;
+    BowerManager.prototype.listPackages = function (options) {
+        if (options === void 0) { options = {}; }
+        var logger = this.logger;
         this.logger.info("BowerManager", "retriving packages...");
         this.bower.commands.list()
             .on("log", function (log) {
             debugger;
-            logger.trace("BowerManager", `${log.id}: ${log.message}`);
+            logger.trace("BowerManager", log.id + ": " + log.message);
             if (options.progress) {
-                let notify = {
+                var notify = {
                     log: log
                 };
-                let result = {
+                var result = {
                     error: null,
                     result: null,
                     notify: notify
                 };
-                let operationResult = {
+                var operationResult = {
                     result: result,
                     shared: options.share
                 };
@@ -430,19 +436,19 @@ class BowerManager {
         })
             .on("error", function (e) {
             debugger;
-            logger.error("BowerManager", `on retriving packages. Code: '${e.code}', details:'${e.message}'`);
+            logger.error("BowerManager", "on retriving packages. Code: '" + e.code + "', details:'" + e.message + "'");
             if (options.error) {
-                let error = {
+                var error = {
                     code: e.code,
                     message: e.message,
                     error: e
                 };
-                let result = {
+                var result = {
                     error: error,
                     result: null,
                     notify: null
                 };
-                let operationResult = {
+                var operationResult = {
                     result: result,
                     shared: options.share
                 };
@@ -452,25 +458,26 @@ class BowerManager {
             .on("end", function (info) {
             logger.info("BowerManager", "^gok^: retriving packages");
             if (options.done) {
-                let result = {
+                var result = {
                     error: null,
                     result: info,
                     notify: null
                 };
-                let operationResult = {
+                var operationResult = {
                     result: result,
                     shared: options.share
                 };
                 options.done(operationResult);
             }
         });
-    }
+    };
     /**
      * @description Overwrite the content of the bower.json file
      * @param {Object}              config          The object to set in bower.json file
      * @param {IOperationOptions}   options     Options
      */
-    setConfigFile(config, options = {}) {
+    BowerManager.prototype.setConfigFile = function (config, options) {
+        if (options === void 0) { options = {}; }
         this.logger.info("BowerManager", "writting config file...");
         try {
             if (typeof config != "string") {
@@ -480,12 +487,12 @@ class BowerManager {
                 if (!err) {
                     this.logger.info("BowerManager", "writting config file...^gok^:");
                     if (options.done) {
-                        let result = {
+                        var result = {
                             error: null,
                             result: true,
                             notify: null
                         };
-                        let operationResult = {
+                        var operationResult = {
                             result: result,
                             shared: options.share
                         };
@@ -495,17 +502,17 @@ class BowerManager {
                 else {
                     this.logger.error("BowerManager", "fail on writting bower.json file:", err.details);
                     if (options.error) {
-                        let error = {
+                        var error = {
                             code: err.code,
                             message: err.detail,
                             error: err
                         };
-                        let result = {
+                        var result = {
                             error: error,
                             result: null,
                             notify: null
                         };
-                        let operationResult = {
+                        var operationResult = {
                             result: result,
                             shared: options.share
                         };
@@ -517,31 +524,32 @@ class BowerManager {
         catch (e) {
             this.logger.error("BowerManager", "fail on writting bower.json file:", e.message);
             if (options.error) {
-                let error = {
+                var error = {
                     code: e.code,
                     message: e.message,
                     error: e
                 };
-                let result = {
+                var result = {
                     error: error,
                     result: null,
                     notify: null
                 };
-                let operationResult = {
+                var operationResult = {
                     result: result,
                     shared: options.share
                 };
                 options.error(operationResult);
             }
         }
-    }
+    };
     /**
      * @description Get the content of the bower.json file
      * @param {IOperationOptions}   options     Options
      */
-    getConfigFile(options = {}) {
+    BowerManager.prototype.getConfigFile = function (options) {
+        if (options === void 0) { options = {}; }
         this.logger.info("BowerManager", "retriving config file...");
-        let route = path.resolve(process.cwd(), "bower.json");
+        var route = path.resolve(process.cwd(), "bower.json");
         debugger;
         /*try {
             let bowerrc = this.fs.readFileSync(".bowerrc", {encoding: "utf8"});
@@ -567,19 +575,19 @@ class BowerManager {
                 }
             }
         }*/
-        this.logger.trace("BowerManager", `trying to read bower.json from ^c${route}^`);
+        this.logger.trace("BowerManager", "trying to read bower.json from ^c" + route + "^");
         this.fs.readFile(route, { encoding: "utf8" }, function (err, data) {
             if (!err) {
                 try {
-                    let bowerJsonResult = JSON.parse(data);
+                    var bowerJsonResult = JSON.parse(data);
                     this.logger.info("BowerManager", "retriving config file...^gok^:");
                     if (options.done) {
-                        let result = {
+                        var result = {
                             error: null,
                             result: bowerJsonResult,
                             notify: null
                         };
-                        let operationResult = {
+                        var operationResult = {
                             result: result,
                             shared: options.share
                         };
@@ -589,17 +597,17 @@ class BowerManager {
                 catch (e) {
                     this.logger.error("BowerManager", "fail on parse bower.json file:", e.message);
                     if (options.error) {
-                        let error = {
+                        var error = {
                             code: e.code,
                             message: e.message,
                             error: e
                         };
-                        let result = {
+                        var result = {
                             error: error,
                             result: null,
                             notify: null
                         };
-                        let operationResult = {
+                        var operationResult = {
                             result: result,
                             shared: options.share
                         };
@@ -616,17 +624,17 @@ class BowerManager {
                         this.logger.error("BowerManager", "fail on get bower.json file:", err.message);
                         break;
                         if (options.error) {
-                            let error = {
+                            var error = {
                                 code: err.code,
                                 message: err.message,
                                 error: err
                             };
-                            let result = {
+                            var result = {
                                 error: error,
                                 result: null,
                                 notify: null
                             };
-                            let operationResult = {
+                            var operationResult = {
                                 result: result,
                                 shared: options.share
                             };
@@ -635,6 +643,7 @@ class BowerManager {
                 }
             }
         }.bind(this));
-    }
-}
+    };
+    return BowerManager;
+}());
 exports.BowerManager = BowerManager;

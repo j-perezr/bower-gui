@@ -1,3 +1,4 @@
+///<reference path="../../_all.d.ts"/>
 import {IAngularStatic,IQService,IHttpService} from "@types/angular";
 /**
  * @module LocaleLoader
@@ -18,7 +19,7 @@ module localizer {
      * @class
      * @description Clase padre para los cargadores
      */
-    abstract class BaseLocalizerSrv extends common.BaseSrv{
+    abstract class BaseLocalizerSrv extends common.services.BaseSrv{
         protected baseUrl:string;
         protected promise:JQueryPromise<any>;
         protected request;
@@ -133,9 +134,10 @@ module localizer {
                 deferred.resolve({lang:lang});
             },function(results){
                 //si la carga de algún idioma falla se cargan los datos por defecto
-                that.$translate.use(langConfig.default).then(function (result) {
-                    deferred.reject({lang:langConfig.default,message:result});
-                });
+                deferred.reject(results);
+                //that.$translate.use(langConfig.default).then(function (result) {
+                //    deferred.reject({lang:langConfig.default,message:result});
+                //});
             });
             return deferred.promise;
         }
@@ -156,6 +158,8 @@ module localizer {
                 // do something with $http, $q and key to load localization files
                 $q.all(promises).then(function(results){
                     deferred.resolve(results);
+                },function(results){
+                    deferred.reject(results);
                 });
                 return deferred.promise;
             };

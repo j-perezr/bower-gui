@@ -1,3 +1,4 @@
+///<reference path="../_all.d.ts"/>
 /**
  * @module Routes
  * @description Directrices de navegación
@@ -9,11 +10,12 @@ module bowergui {
          * @property audiovisual
          * @description Marco común
          */
-        $stateProvider.state('audiovisual', {
+        $stateProvider.state('bowergui', {
             url: '/',
-            abstract: true,
-            templateUrl: 'app/components/master/master.tpl.html',
-            controller: "MasterCtrl"
+            templateUrl: './app/master/master.tpl.html',
+            controller: "MasterCtrl",
+            controllerAs:"masterCtrl",
+            bindToController:true
         });
     });
 }

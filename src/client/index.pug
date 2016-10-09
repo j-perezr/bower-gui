@@ -3,6 +3,7 @@ html
     head
         meta(charset="UTF-8")
         meta(meta name="viewport" content="width=device-width, initial-scale=1.0")
+        link(rel="stylesheet" href="./bower_components/font-awesome/css/font-awesome.css")
         //build:cssVendor styles.css
         link(rel="stylesheet" href="./bower_components/angular/angular-csp.css")
         link(rel="stylesheet" href="./bower_components/angular-material/angular-material.css")
@@ -10,23 +11,30 @@ html
         //build:css styles.css
 
         //endbuild
-    body
+    body(data-ng-app="bowergui" data-ng-csp="no-inline-style")
         //if lte IE 10
             <p class="browsehappy">You are using an strong outdated browser. Please <a href='http://browsehappy.com/'>upgrade your browser to improve your experience.</a></p>
 
         div(data-ui-view)
         //build:jsVendor vendor.js
+        script(type="text/javascript" src="./bower_components/jquery/dist/jquery.js")
         script(type="text/javascript" src="./bower_components/angular/angular.js")
         script(type="text/javascript" src="./bower_components/angular-animate/angular-animate.js")
+        script(type="text/javascript" src="./bower_components/angular-message-format/angular-message-format.js")
+        script(type="text/javascript" src="./bower_components/angular-sanitize/angular-sanitize.js")
         script(type="text/javascript" src="./bower_components/angular-aria/angular-aria.js")
+        script(type="text/javascript" src="./bower_components/angular-translate/angular-translate.js")
         script(type="text/javascript" src="./bower_components/angular-ui-router/release/angular-ui-router.js")
         script(type="text/javascript" src="./bower_components/angular-material/angular-material.js")
         script(type="text/javascript" src="./bower_components/socket.io-client/socket.io.js")
         //endbuild
         //build:js app.js
-        script(type="text/javascript" src="./app/common/_BaseCtrl.js")
+        script(type="text/javascript" src="./app/common/BaseCtrl.js")
         script(type="text/javascript" src="./app/common/services/_BaseSrv.js")
+        script(type="text/javascript" src="./app/common/utils/toast/ToastCtrl.js")
+        script(type="text/javascript" src="./app/common/utils/toast/ToastPrv.js")
         script(type="text/javascript" src="./app/common/Localizer.js")
         script(type="text/javascript" src="./app/app.js")
         script(type="text/javascript" src="./app/routes.js")
+        script(type="text/javascript" src="./app/master/MasterCtrl.js")
         //endbuild

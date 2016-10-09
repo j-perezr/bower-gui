@@ -1,4 +1,6 @@
-module common{
+///<reference path="../../../_all.d.ts"/>
+import {IHttpService} from "angular";
+module common.services{
     export interface IServiceOptions {
         timeout:number;
     }
@@ -20,7 +22,7 @@ module common{
         _data:IServiceRequestParamsData
     }
 
-    export class BaseSrv {
+    export abstract class BaseSrv {
         public static ERROR_CODES = {
             "invalid": 0,
             "resourceNotFound": 10,
@@ -51,7 +53,7 @@ module common{
          * @param data          Datos recibidos del servidor
          * @returns {*}
          */
-        protected _parseResult (method,params,data):any {
+        protected _parseResult  (method,params,data):any {
             return data;
         };
         /**
@@ -60,10 +62,11 @@ module common{
          * @param code
          * @param f
          * @param xhr
-         * @private
+         * @protected
          */
-        protected _onSuccess (data, code, f, xhr) {
-            let _data = xhr._data,
+        protected _onSuccess  (response) {
+            let {config,data,headers,status,statusText} = response;
+            let _data = config._data,
                 instance = _data.instance;
             data = instance._parseResult(_data.method,(_data.params || _data.data),data);
             if (_data.context) {
@@ -79,16 +82,17 @@ module common{
          * @param error
          * @param f
          * @param xhr
-         * @private
+         * @protected
          */
-        protected _onError (message, error, f, xhr) {
-            let _data = xhr._data,
+        protected _onError  (response) {
+            let {config,data,headers,status,statusText} = response;
+            let _data = config._data,
                 instance = _data.instance;
             if (_data.context) {
-                _data.deferred.rejectWith(_data.context, [{ message: message, error: error }, _data.shared]);
+                _data.deferred.rejectWith(_data.context, [{ message: statusText, error: status }, _data.shared]);
             }
             else {
-                _data.deferred.reject({ message: message, error: error }, _data.shared);
+                _data.deferred.reject({ message: statusText, error: status }, _data.shared);
             }
         };
         /**
@@ -100,9 +104,9 @@ module common{
          * @param [config.context]      Contexto con el que resolver la promsea. Dentro del callback el contexto se podrá acceder mediante el uso de this
          * @param [config.share]       Datos a pasar al callback
          * @returns {*}
-         * @private
+         * @protected
          */
-        protected _makeDelete (method,url,data,config?):JQueryPromise<any> {
+        protected _makeDelete  (method,url,data,config?):JQueryPromise<any> {
             return this._makeRequest(method,"DELETE",url,data,config);
         };
         /**
@@ -114,9 +118,9 @@ module common{
          * @param [config.context]      Contexto con el que resolver la promsea. Dentro del callback el contexto se podrá acceder mediante el uso de this
          * @param [config.share]       Datos a pasar al callback
          * @returns {*}
-         * @private
+         * @protected
          */
-        protected _makePost (method,url,data,config?):JQueryPromise<any> {
+        protected _makePost  (method,url,data,config?):JQueryPromise<any> {
             return this._makeRequest(method,"POST",url,data,config);
         };
         /**
@@ -128,9 +132,9 @@ module common{
          * @param [config.context]      Contexto con el que resolver la promsea. Dentro del callback el contexto se podrá acceder mediante el uso de this
          * @param [config.share]       Datos a pasar al callback
          * @returns {*}
-         * @private
+         * @protected
          */
-        protected _makePut (method,url,data,config?):JQueryPromise<any> {
+        protected _makePut  (method,url,data,config?):JQueryPromise<any> {
             return this._makeRequest(method,"PUT",url,data,config);
         };
         /**
@@ -142,9 +146,9 @@ module common{
          * @param [config.context]      Contexto con el que resolver la promsea. Dentro del callback el contexto se podrá acceder mediante el uso de this
          * @param [config.share]       Datos a pasar al callback
          * @returns {*}
-         * @private
+         * @protected
          */
-        protected _makeGet (method,url,data, config?):JQueryPromise<any> {
+        protected _makeGet  (method,url,data, config?):JQueryPromise<any> {
             return this._makeRequest(method,"GET",url,data,config);
         };
         /**
@@ -157,7 +161,7 @@ module common{
          * @param [config.context]      Contexto con el que resolver la promsea. Dentro del callback el contexto se podrá acceder mediante el uso de this
          * @param [config.share]       Datos a pasar al callback
          * @returns {*}
-         * @private
+         * @protected
          */
         protected _makeRequest (method,type,url,data, config?):JQueryPromise<any> {
             config = config || {};
@@ -167,7 +171,8 @@ module common{
                 url: url,
                 headers: {
                     "Content-Type": "application/json"
-                }
+                },
+                _data:null
             };
             if(type == "GET"){
                 req.params = data;
@@ -182,6 +187,7 @@ module common{
                 deferred : deferred,
                 shared:config.share
             };
+            //noinspection TypeScriptValidateTypes
             this.$http(req).then(this._onSuccess,this._onError);
             return deferred.promise();
         };

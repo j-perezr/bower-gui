@@ -1,0 +1,4 @@
+md-toast
+    h1.md-toast__title(data-ng-if="::toastCtrl.params.title" data-ng-bind="::toastCtrl.params.title")
+    div.md-toast__wrapper
+        p.md-toast__message(data-ng-repeat="message in ::toastCtrl.params.messages track by $index" data-ng-bind="::message")
